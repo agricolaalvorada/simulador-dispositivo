@@ -87,6 +87,7 @@ public class HomeController {
         model.addAttribute("device", device);
 
         System.out.println("Dados: " + data);
+        data = data.replace(",", ".");
 
         String json = data;
         if (device.equals("Determinador de umidade")) {

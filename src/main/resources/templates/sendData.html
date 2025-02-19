@@ -119,8 +119,7 @@
 
     <form action="/simulador/send-data" method="post">
         <label for="data" id="dataLabel">Dados:</label>
-        <input type="text" id="data" name="data" pattern="^[0-9]+(\.[0-9]{1,2})?$"  title="Somente números  são permitidos">
-
+        <input type="text" id="data" name="data" pattern="^[0-9]+([.,][0-9]+)?$"  title="Somente números  são permitidos">
         <label for="device">Dispositivo Selecionado:</label>
         <input type="text" id="device" name="device" th:value="${device}" readonly oninput="updateLabel()">
 
