@@ -69,7 +69,7 @@
 <div class="container">
     <h1>Configuração do Servidor</h1>
 
-    <form action="/simulador/start-server" method="post">
+    <form id="configForm" action="/simulador/start-server" method="post">
         <label for="port">Porta:</label>
         <input type="number" id="port" name="port" required>
 
@@ -79,11 +79,19 @@
             <option value="2">Balança de Classificação</option>
         </select>
 
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required>
+
+        <p id="senhaErro" style="color: red; display: none;">Senha incorreta!</p>
+
         <button type="submit">Iniciar Servidor</button>
     </form>
+
 </div>
 
 <script>
+    let senhaCorreta = "";
+
     function updatePort() {
         var deviceSelect = document.getElementById("device");
         var portInput = document.getElementById("port");
@@ -95,9 +103,40 @@
         }
     }
 
-    window.onload = function() {
+    async function fetchPassword() {
+        try {
+            let response = await fetch('/simulador/get-password');
+            let password = await response.text();
+            senhaCorreta = password.trim();
+        } catch (error) {
+            console.error("Erro ao buscar senha:", error);
+        }
+    }
+
+    document.getElementById("configForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        let senhaDigitada = document.getElementById("password").value.trim();
+        let erroMensagem = document.getElementById("senhaErro");
+
+        if (!senhaCorreta) {
+            alert("A senha ainda não foi carregada. Tente novamente em alguns segundos.");
+            return;
+        }
+
+        if (senhaDigitada === senhaCorreta) {
+            erroMensagem.style.display = "none";
+            this.submit();
+        } else {
+            erroMensagem.style.display = "block";
+        }
+    });
+
+    window.onload = async function() {
         updatePort();
+        await fetchPassword();
     }
 </script>
+
 </body>
 </html>

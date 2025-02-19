@@ -1,10 +1,12 @@
 package com.simuladorDispositivos.simuladordispositivo.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,6 +21,14 @@ public class HomeController {
     private int port;
     private Socket clientSocket;
     private ServerSocket serverSocket ;
+
+    @Value("${server.password}")
+    private String serverPassword;
+
+    @GetMapping("/get-password")
+    public @ResponseBody String getPassword() {
+        return serverPassword.trim();
+    }
 
     @GetMapping("/")
     public String showConfigPage(Model model) {
