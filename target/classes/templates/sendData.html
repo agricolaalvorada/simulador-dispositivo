@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envio de Dados</title>
+    <style>
+        body {
+            background-color: #2e7d32;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 15px 0 5px;
+            text-align: left;
+        }
+
+        input, select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0 15px;
+            border-radius: 5px;
+            border: none;
+            display: block;
+            background: white;
+            color: black;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #1b5e20;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #145a1f;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .button-container a {
+            flex: 1;
+            text-decoration: none;
+        }
+
+        .button-container button {
+            width: 100%;
+        }
+    </style>
+    <script>
+        function toggleSojaMilho() {
+            var dispositivo = document.getElementById("device").value;
+            var sojaMilhoField = document.getElementById("sojaMilhoField");
+            if (dispositivo === "Determinador de umidade") {
+                sojaMilhoField.style.display = "block";
+            } else {
+                sojaMilhoField.style.display = "none";
+            }
+        }
+
+        function updateLabel() {
+            var device = document.getElementById("device").value;
+            var label = document.getElementById("dataLabel");
+
+            if (device === "Determinador de umidade") {
+                label.innerText = "Umidade:";
+            } else {
+                label.innerText = "Dados:";
+            }
+        }
+
+        window.onload = function() {
+            toggleSojaMilho();
+            updateLabel();
+        };
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Simulador de Dispositivos</h1>
+
+    <p th:text="${message}"></p>
+    <p th:text="${messageSucesso}"></p>
+    <div th:if="${clientMessage}">
+        <p th:text="${clientMessage}"></p>
+    </div>
+
+    <form action="/simulador/send-data" method="post">
+        <label for="data" id="dataLabel">Dados:</label>
+        <input type="text" id="data" name="data" pattern="^[0-9]+(\.[0-9]+)?$" title="Somente números  são permitidos">
+
+        <label for="device">Dispositivo Selecionado:</label>
+        <input type="text" id="device" name="device" th:value="${device}" readonly oninput="updateLabel()">
+
+        <div id="sojaMilhoField" style="display: none;">
+            <label for="sojaMilho">Selecione o Produto:</label>
+            <select id="sojaMilho" name="sojaMilho">
+                <option value="SOJA">SOJA</option>
+                <option value="MILHO">MILHO</option>
+            </select>
+        </div>
+
+        <div class="button-container">
+            <a href="/simulador/"><button type="button">Voltar</button></a>
+            <button id="sendButton" type="submit">Enviar Dados</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
