@@ -1,3 +1,7 @@
+
+target/*
+/targetc
+
 # Compiled class file
 *.class
 
@@ -23,5 +27,4 @@
 hs_err_pid*
 replay_pid*
 
-target/
 
